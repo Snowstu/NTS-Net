@@ -1,0 +1,12 @@
+Paper:Look Closer to See Better: Recurrent Attention Convolutional Neural Network for Fine-grained Image Recognition
+这篇文章是CVPR2017的一篇oral paper
+细粒度图像识别的挑战主要包括两个方面：判别力区域定位以及从判别力区域学习精细化特征。
+RA-CNN以一种相互强化的方式递归地学习判别力区域attention和基于区域的特征表示。
+主要思路
+
+如上图，每一行表示一个普通的CNN网络，
+（1）图片a1进入b1（堆叠多个卷积层）之后，分成两个部分，一个部分到c1连接fc+softmax进行普通的分类；另一个部分进入d1，Attention Proposal Network得到一个region proposal。
+（2）在原图上利用d1提出的region proposal，在原图上crop出一个更有判别性的小区域，插值之后得到a2,同样的道理得到a3。
+可以看出特征区域经过两个APN之后不断放大和精细化，为了使得APN选取的特征区域是图像中最具有判别性的区域，作者引入了一个Ranking loss：
+即强迫a1、a2、a3区域的分类confidence score越来越高(图片最后一列的对应Pt概率越来越大)。这样以来，联合普通的分类损失，
+使网络不断细化discriminative attention region。
